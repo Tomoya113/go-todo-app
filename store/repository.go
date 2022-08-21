@@ -3,11 +3,13 @@ package store
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"fmt"
 	"time"
 
 	"github.com/Tomoya113/go-todo-app/clock"
 	"github.com/Tomoya113/go-todo-app/config"
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -37,6 +39,14 @@ var (
 	_ Preparer = (*sqlx.DB)(nil)
 	_ Execer   = (*sqlx.DB)(nil)
 	_ Queryer  = (*sqlx.DB)(nil)
+)
+
+const (
+	ErrCodeMySQLDuplicateEntry = 1062
+)
+
+var (
+	ErrAlreadyEntry = errors.New("duplicate entry")
 )
 
 type Repository struct {
